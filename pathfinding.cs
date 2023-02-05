@@ -10,6 +10,8 @@
     public List<PathFindingNode> CalculateGridPath(Vector3 start, Vector3 end, PathFindingNode[,] nodes)
     {
         List<PathFindingNode> path = new List<PathFindingNode>();
+        HashSet<PathFindingZone> closed = new HashSet<PathFindingZone>();
+
         // Get the start node
         PathFindingNode startNode = MapNode(start, nodes);
         // Get the end node
@@ -24,7 +26,7 @@
             foreach(PathFindingNode node in currentNode.childrens)
             {
                 // node can be null in this case because of the grid boundaries
-                if(node == null)
+                if(closed.Contains(node) || node == null)
                 {
                     continue;
                 }
@@ -38,12 +40,12 @@
             // Check which node is the nearest to the end node
             foreach(KeyValuePair<PathFindingNode, float> kvp in distances)
             {
-                if(!kvp.Key.walkable)
+                if (!closed.Contains(kvp.Key))
                 {
-                    continue;
+                    closed.Add(kvp.Key);
                 }
 
-                if(kvp.Value < bestDistance)
+                if(kvp.Key.walkable && kvp.Value < bestDistance)
                 {
                     bestNode = kvp.Key;
                     bestDistance = kvp.Value;
