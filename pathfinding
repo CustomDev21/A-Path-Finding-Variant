@@ -49,6 +49,13 @@
                     bestDistance = kvp.Value;
                 }
             }
+            
+            // if the node is not reachable interrupt
+            if(bestDistance == Mathf.Infinity)
+            {
+                break;
+            }
+            
             // add the best find node to the path list
             path.Add(bestNode);
 
